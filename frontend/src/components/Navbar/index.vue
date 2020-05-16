@@ -5,7 +5,7 @@
     </div>
   
     <div class="flex justify-end">
-      <a href="#" class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-indigo-500 hover:bg-white lg:mt-0">Login</a>
+      <a href="#" class="inline-block text-md px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-indigo-500 hover:bg-white lg:mt-0">Login</a>
     </div>
   </nav>
 </template>
