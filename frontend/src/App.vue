@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="h-screen bg-gray-100">
     <navbar />
-    <router-view/>
+    <router-view class="mx-5 sm:mx-12 md:mx-24 lg:mx-64 my-5"/>
   </div>
 </template>
 
