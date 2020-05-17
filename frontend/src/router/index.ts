@@ -12,14 +12,19 @@ Vue.use(VueRouter)
     component: Home
   },
   {
-    path: '/playlist/new',
+    path: '/playlists/new',
     name: 'NewPlaylist',
     component: () => import('../views/NewPlaylist.vue')
   },
   {
-    path: '/playlist/:id',
+    path: '/playlists/:id',
     name: 'Playlist',
     component: () => import('../views/Playlist.vue')
+  },
+  {
+    path: '/playlists',
+    name: 'UserPlaylists',
+    component: () => import('../views/UserPlaylists.vue')
   }
 ]
 

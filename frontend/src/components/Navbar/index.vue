@@ -7,7 +7,7 @@
     <div class="flex justify-end">
       <button v-if="!this.$store.state.isLoggedIn" @click="handleLogin" class="inline-block text-md px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-indigo-500 hover:bg-white lg:mt-0">Login</button>
       <template v-if="this.$store.state.isLoggedIn">
-        <router-link to="/playlist/new" class="inline-block text-md mr-4 px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-indigo-500 hover:bg-white lg:mt-0">Create new playlist</router-link>
+        <router-link to="/playlists" class="inline-block text-md mr-4 px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-indigo-500 hover:bg-white lg:mt-0">Your playlists</router-link>
         <button @click="handleLogout" class="inline-block text-md px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-indigo-500 hover:bg-white lg:mt-0">Logout</button>
       </template>
     </div>
@@ -19,10 +19,12 @@
     name: "navbar",
     methods: {
       handleLogin: function () {
-        this.$store.commit('setIsLoggedIn', true);
+        this.$store.commit('setIsLoggedIn', true)
+        this.$store.commit('setUserId', '1')
       },
       handleLogout: function () { 
-        this.$store.commit('setIsLoggedIn', false);
+        this.$store.commit('setIsLoggedIn', false)
+        this.$store.commit('setUserId', '')
         this.$router.push({ path: '/' })
       }
     }
