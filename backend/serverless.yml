@@ -1,0 +1,25 @@
+service:
+  name: youtube-playlist-sharing
+
+plugins:
+  - serverless-webpack
+  - serverless-iam-roles-per-function
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+ 
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+
+custom:
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: Youtube Playlist Sharing API
+        description: Serverless application for sharing youtube playlists
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+
