@@ -69,6 +69,10 @@
     },
     methods: {
       handleAddVideoUrl() {
+        if (this.youtubeUrl.trim() === '') {
+          return
+        }
+
         this.playlistUrls.push(this.youtubeUrl)
         this.youtubeUrl = ''
       },
