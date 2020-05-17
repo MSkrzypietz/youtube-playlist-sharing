@@ -8,14 +8,12 @@
 </template>
 
 <script>
+  import { Playlist } from '@/models/Playlist'
+
   export default {
     name: "PlaylistCard",
     props: {
-      playList: {
-        playListId: String,
-        thumbnailUrl: String,
-        playListName: String
-      }
+      playList: Playlist
     }
   }
 </script>

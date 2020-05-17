@@ -56,7 +56,7 @@
 
 <script>
   export default {
-    name: 'new-playlist-form',
+    name: 'NewPlaylistForm',
     data() {
       return {
         playlistName: '',
