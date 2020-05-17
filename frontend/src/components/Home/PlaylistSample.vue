@@ -3,7 +3,9 @@
     <h1 class="text-left font-bold text-2xl mb-5 ">Check out some playlists of other users!</h1>
     <div class="flex flex-wrap -mx-2 -mb-4">
       <div v-for="(item, index) in items" :key="item.playListId" class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 px-2 mb-4">
-        <playlist-card :playList="items[index]" />
+        <router-link :to="`/playlist/${item.playListId}`">
+          <playlist-card :playList="items[index]" />
+        </router-link>
       </div>      
     </div>
   </div>
