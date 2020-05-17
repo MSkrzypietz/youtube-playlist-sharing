@@ -1,15 +1,7 @@
 <template>
   <div>
     <div class="flex mb-5">
-      <h1 class="text-left font-bold text-2xl">{{ playlist.caption }}</h1>
-      <div v-if="this.$store.state.userId === this.playlist.ownerId" class="flex">
-        <button @click="toggleRenaming" class="ml-4 shadow bg-indigo-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">Rename</button>
-        <div v-if="inRenameAction" class="flex ml-4">
-          <input v-model="newPlaylistName" class="w-full bg-gray-200 appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-400" id="inline-playlist-name" type="text" placeholder="Enter a new name">
-          <button @click="renamePlaylist" class="ml-2 shadow bg-indigo-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">Confirm</button>
-          <button @click="toggleRenaming" class="ml-2 shadow bg-indigo-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">Cancel</button>
-        </div>
-      </div>
+      <h1 class="text-left font-bold text-2xl">{{ playlist.caption }}</h1>      
     </div>
     <div class="flex flex-wrap -mx-2 -mb-4">
       <div v-for="(item) in playlist.videos" :key="item.url" class="w-full sm:w-1/2 md:w-1/3 px-2 mb-4">      
@@ -18,6 +10,12 @@
     </div>
     
     <div v-if="this.$store.state.userId === this.playlist.ownerId">
+      <h1 class="text-left font-bold text-2xl mt-10">Rename your playlist</h1>
+      <div class="flex w-3/5">
+        <input class="flex-grow bg-gray-200 appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-400" id="inline-playlist-name" type="text" placeholder="Enter a new name">
+        <button class="ml-2 shadow bg-indigo-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">Rename</button>
+      </div>
+
       <h1 class="text-left font-bold text-2xl mt-10">Add a new video to your playlist</h1>
       <div class="flex w-3/5">
         <input class="flex-grow bg-gray-200 appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-400" id="inline-playlist-name" type="text" placeholder="Enter a new Youtube URL">
@@ -26,7 +24,7 @@
 
       <h1 class="text-left font-bold text-2xl mt-10">Update the thumbnail of your playlist</h1>
       <div class="flex w-3/5">
-        <input class="flex-grow bg-gray-200 appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-400" id="inline-playlist-name" type="file" placeholder="Enter a new name">
+        <input class="flex-grow bg-gray-200 appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-400" id="inline-playlist-name" type="file">
         <button class="ml-2 shadow bg-indigo-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">Update</button>
       </div>
     </div>
@@ -42,9 +40,7 @@
       VideoCard
     },
     data() {
-      return {
-        inRenameAction: false,
-        newPlaylistName: '',
+      return {        
         playlist: {
           id: '1',
           ownerId: '1',
@@ -65,14 +61,6 @@
           ]
         }
       };
-    },
-    methods: {
-      toggleRenaming () {
-        this.inRenameAction = !this.inRenameAction
-      },
-      renamePlaylist () {
-        this.playlist.caption = this.newPlaylistName
-      }
     }
   }
 </script>
