@@ -14,6 +14,7 @@ provider:
 
   environment:
     PLAYLISTS_TABLE: Playlists-${self:provider.stage}
+    PLAYLIST_ID_INDEX: PlaylistIdIndex
     IMAGES_S3_BUCKET: youtube-playlist-sharing-mskrzypietz-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
 
@@ -32,6 +33,19 @@ functions:
 
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
+
+  GetTodos:
+    handler: src/lambda/http/getPlaylists.handler
+    events:
+      - http:
+          method: get
+          path: playlists
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PLAYLISTS_TABLE}
 
 resources:
   Resources:
@@ -61,6 +75,13 @@ resources:
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.PLAYLISTS_TABLE}
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.PLAYLIST_ID_INDEX}
+            KeySchema:
+            - AttributeName: playlistId
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
 
     AttachmentsBucket:
       Type: AWS::S3::Bucket
