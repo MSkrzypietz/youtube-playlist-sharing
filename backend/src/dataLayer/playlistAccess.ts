@@ -7,7 +7,20 @@ export class PlaylistAccess {
 
   constructor(
     private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
-    private readonly playlistsTable = process.env.PLAYLISTS_TABLE) {
+    private readonly playlistsTable = process.env.PLAYLISTS_TABLE,
+    private readonly playlistIdIndex = process.env.PLAYLIST_ID_INDEX) {
+  }
+
+  async getPlaylist(playlistId: string): Promise<PlaylistItem> {
+    const result = await this.docClient.query({
+      TableName: this.playlistsTable,
+      IndexName: this.playlistIdIndex,
+      KeyConditionExpression: 'playlistId = :playlistId',
+      ExpressionAttributeValues: { ':playlistId': playlistId } 
+    }).promise()
+
+    const item = result.Items[0]
+    return item as PlaylistItem
   }
 
   async getAllPlaylists(userId: string): Promise<PlaylistItem[]> {
@@ -32,6 +45,6 @@ export class PlaylistAccess {
     }).promise()
 
     return newPlaylist
-  }
+  }  
 
 }

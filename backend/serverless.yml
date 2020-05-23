@@ -34,8 +34,21 @@ functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
 
-  GetPlaylists:
-    handler: src/lambda/http/getPlaylists.handler
+  GetPlaylist:
+    handler: src/lambda/http/getPlaylist.handler
+    events:
+      - http:
+          method: get
+          path: playlists/{playlistId}
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PLAYLISTS_TABLE}/index/${self:provider.environment.PLAYLIST_ID_INDEX}
+
+  GetAllPlaylists:
+    handler: src/lambda/http/getAllPlaylists.handler
     events:
       - http:
           method: get

@@ -8,7 +8,7 @@ export async function getUserPlaylists(idToken: string): Promise<PlaylistItem[]>
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
-    },
+    }
   })
 
   return response.data.items
@@ -19,6 +19,16 @@ export async function createPlaylist(idToken: string, newPlaylist: CreatePlaylis
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
+    }
+  })
+
+  return response.data.item
+}
+
+export async function getPlaylist(playlistId: string): Promise<PlaylistItem> {
+  const response = await Axios.get(`${apiEndpoint}/playlists/${playlistId}`, {
+    headers: {
+      'Content-Type': 'application/json'
     }
   })
 
