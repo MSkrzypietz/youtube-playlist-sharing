@@ -34,17 +34,32 @@ functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
 
-  GetTodos:
+  GetPlaylists:
     handler: src/lambda/http/getPlaylists.handler
     events:
       - http:
           method: get
           path: playlists
           cors: true
+          authorizer: Auth
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PLAYLISTS_TABLE}
+
+  CreatePlaylists:
+    handler: src/lambda/http/createPlaylist.handler
+    events:
+      - http:
+          method: post
+          path: playlists/new
+          cors: true
+          authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PLAYLISTS_TABLE}
 
 resources:

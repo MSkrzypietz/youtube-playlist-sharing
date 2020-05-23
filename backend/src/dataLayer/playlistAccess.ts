@@ -23,4 +23,15 @@ export class PlaylistAccess {
     return items as PlaylistItem[]
   }
 
+  async createPlaylist(newPlaylist: PlaylistItem): Promise<PlaylistItem> {
+    await this.docClient.put({
+      TableName: this.playlistsTable,
+      Item: {
+        ...newPlaylist
+      }
+    }).promise()
+
+    return newPlaylist
+  }
+
 }
