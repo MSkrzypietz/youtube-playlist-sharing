@@ -19,7 +19,7 @@
     data() {
       return {
         playlist: null,
-        isLoading: true
+        isLoading: false
       }
     },
     created() {

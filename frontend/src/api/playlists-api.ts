@@ -14,7 +14,7 @@ export async function getUserPlaylists(idToken: string): Promise<PlaylistItem[]>
   return response.data.items
 }
 
-export async function createPlaylist(idToken: string, newPlaylist: CreatePlaylistRequest): Promise<void> {
+export async function createPlaylist(idToken: string, newPlaylist: CreatePlaylistRequest): Promise<PlaylistItem> {
   const response = await Axios.post(`${apiEndpoint}/playlists/new`,  JSON.stringify(newPlaylist), {
     headers: {
       'Content-Type': 'application/json',
