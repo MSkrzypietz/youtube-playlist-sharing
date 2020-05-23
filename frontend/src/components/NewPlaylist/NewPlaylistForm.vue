@@ -46,7 +46,7 @@
     <div class="md:flex md:items-center">     
       <div class="md:w-1/6" />
       <div>
-        <button class="shadow bg-indigo-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">
+        <button @click="handleCreatePlaylist" class="shadow bg-indigo-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">
           Create Playlist
         </button>
       </div>
@@ -55,6 +55,9 @@
 </template>
 
 <script>
+  import Axios from 'axios'
+  import { createPlaylist } from '../../api/playlists-api'
+
   export default {
     name: 'NewPlaylistForm',
     data() {
@@ -78,6 +81,29 @@
       },
       handleRemoveVideoUrl(index) {
         this.playlistUrls.splice(index, 1)
+      },
+      async handleCreatePlaylist() {
+        const claims = await this.$auth.getIdTokenClaims()
+        const idToken = claims.__raw
+
+        const payload = {
+          name: this.playlistName,
+          videos: []
+        }
+
+        for (let i = 0; i < this.playlistUrls.length; i++) {
+          const url = this.playlistUrls[i]
+          const videoId = url.match("v=([a-zA-Z0-9_-]+)&?")[1]
+          const videoData = await Axios.get('https://noembed.com/embed', { params: { url } })          
+          payload.videos[i] = {
+            ownerId: idToken,
+            caption: videoData.data.title,
+            url,
+            thumbnailUrl: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`
+          }          
+        }
+        
+        createPlaylist(idToken, payload)
       }
     } 
   }
