@@ -96,7 +96,7 @@
           const videoId = url.match("v=([a-zA-Z0-9_-]+)&?")[1]
           const videoData = await Axios.get('https://noembed.com/embed', { params: { url } })          
           payload.videos[i] = {
-            ownerId: idToken,
+            ownerId: this.$auth.user.sub,
             caption: videoData.data.title,
             url,
             thumbnailUrl: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`
