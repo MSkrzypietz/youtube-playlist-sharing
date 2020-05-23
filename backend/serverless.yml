@@ -75,6 +75,20 @@ functions:
           - dynamodb:PutItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PLAYLISTS_TABLE}
 
+  DeletePlaylist:
+    handler: src/lambda/http/deletePlaylist.handler
+    events:
+      - http:
+          method: delete
+          path: playlists/{playlistId}
+          cors: true
+          authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PLAYLISTS_TABLE} 
+
 resources:
   Resources:
     GatewayResponseDefault4XX:

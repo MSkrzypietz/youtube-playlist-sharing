@@ -47,4 +47,14 @@ export class PlaylistAccess {
     return newPlaylist
   }  
 
+  async deletePlaylist(userId: string, playlistId: string) {
+    await this.docClient.delete({
+      TableName: this.playlistsTable,
+      Key: {
+        "userId": userId,
+        "playlistId": playlistId
+      }
+    }).promise()
+  }
+
 }

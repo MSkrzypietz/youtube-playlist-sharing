@@ -34,3 +34,12 @@ export async function getPlaylist(playlistId: string): Promise<PlaylistItem> {
 
   return response.data.item
 }
+
+export async function deletePlaylist(idToken: string, playlistId: string): Promise<void> {
+  await Axios.delete(`${apiEndpoint}/playlists/${playlistId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${idToken}`
+    }
+  })
+}
