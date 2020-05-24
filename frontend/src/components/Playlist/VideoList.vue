@@ -26,8 +26,8 @@
 
       <h1 class="text-left font-bold text-2xl mt-10">Update the thumbnail of your playlist</h1>
       <div class="flex w-3/5">
-        <input class="flex-grow bg-gray-200 appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-400" id="inline-playlist-thumbnail" type="file">
-        <button class="ml-2 shadow bg-indigo-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">Update</button>
+        <input @change="fileChange" class="flex-grow bg-gray-200 appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-400" id="inline-playlist-thumbnail" type="file">
+        <button @click="changeThumbnailUrl" class="ml-2 shadow bg-indigo-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">Update</button>
       </div>
 
       <div class="flex mt-10">
@@ -51,7 +51,7 @@
   import VideoCard from './VideoCard'
   import LoadingBar from '../LoadingBar'
 
-  import { deletePlaylist, updatePlaylist } from '../../api/playlists-api'
+  import { deletePlaylist, updatePlaylist, getUploadUrl, uploadFile } from '../../api/playlists-api'
 
   export default {
     name: "VideoList",
@@ -99,6 +99,8 @@
         await updatePlaylist(idToken, playlistId, updateItem)
       },
       async renamePlaylist() {
+        this.isLoading = true
+
         const claims = await this.$auth.getIdTokenClaims()
         const idToken = claims.__raw
         const playlistId = this.playlist.playlistId
@@ -109,6 +111,8 @@
         
         await updatePlaylist(idToken, playlistId, updateItem)
         this.playlist.name = this.newName
+
+        this.isLoading = false
       },
       async addVideo() {
         const url = this.newVideoUrl
@@ -132,6 +136,33 @@
           videoUrls: this.playlist.videos
         }
         await updatePlaylist(idToken, playlistId, updateItem)
+      },
+      fileChange() {
+        const files = event.target.files
+        if (!files) return
+
+        this.file = files[0]
+      },
+      async changeThumbnailUrl() {
+        try {
+          if (!this.file) {
+            alert('File should be selected')
+            return
+          }
+
+          this.isLoading = true
+          const claims = await this.$auth.getIdTokenClaims()
+          const idToken = claims.__raw
+          const playlistId = this.playlist.playlistId
+          const uploadUrl = await getUploadUrl(idToken, playlistId)
+          await uploadFile(uploadUrl, this.file)
+
+          alert('File was uploaded!')
+        } catch (e) {
+          alert('Could not upload a file: ' + e.message)
+        } finally {
+          this.isLoading = false
+        }
       }
     }
   }

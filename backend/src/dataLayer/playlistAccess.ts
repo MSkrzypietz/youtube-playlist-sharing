@@ -7,8 +7,11 @@ export class PlaylistAccess {
 
   constructor(
     private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
+    private readonly s3 = new AWS.S3({ signatureVersion: 'v4' }),
     private readonly playlistsTable = process.env.PLAYLISTS_TABLE,
-    private readonly playlistIdIndex = process.env.PLAYLIST_ID_INDEX) {
+    private readonly playlistIdIndex = process.env.PLAYLIST_ID_INDEX,
+    private readonly bucketName = process.env.IMAGES_S3_BUCKET,
+    private readonly urlExpiration = Number(process.env.SIGNED_URL_EXPIRATION)) {
   }
 
   async getPlaylist(playlistId: string): Promise<PlaylistItem> {
@@ -57,6 +60,28 @@ export class PlaylistAccess {
       UpdateExpression: "set videos=:newVideos",
       ExpressionAttributeValues:{
           ":newVideos": newVideos
+      }
+    }).promise()
+  }
+
+  async getSignedUrl(bucketKey: string): Promise<string> {
+    return this.s3.getSignedUrl('putObject', {
+      Bucket: this.bucketName,
+      Key: bucketKey,
+      Expires: this.urlExpiration
+    })
+  }
+
+  async updatePlaylistThumbnailUrl(userId: string, playlistId: string) {
+    await this.docClient.update({
+      TableName: this.playlistsTable,
+      Key: {
+        "userId": userId,
+        "playlistId": playlistId
+      },
+      UpdateExpression: "set thumbnailUrl=:thumbnailUrl",
+      ExpressionAttributeValues:{
+          ":thumbnailUrl": `https://${this.bucketName}.s3.amazonaws.com/${playlistId}`
       }
     }).promise()
   }

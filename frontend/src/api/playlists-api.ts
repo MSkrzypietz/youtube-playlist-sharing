@@ -45,6 +45,20 @@ export async function updatePlaylist(idToken: string, playlistId: string, update
   })
 }
 
+export async function getUploadUrl(idToken: string, playlistId: string): Promise<string> {
+  const response = await Axios.post(`${apiEndpoint}/playlists/${playlistId}/attachment`, '', {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${idToken}`
+    }
+  })
+  return response.data.uploadUrl
+}
+
+export async function uploadFile(uploadUrl: string, file: Buffer): Promise<void> {
+  await Axios.put(uploadUrl, file)
+}
+
 export async function deletePlaylist(idToken: string, playlistId: string): Promise<void> {
   await Axios.delete(`${apiEndpoint}/playlists/${playlistId}`, {
     headers: {

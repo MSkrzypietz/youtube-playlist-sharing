@@ -34,6 +34,13 @@ export async function updatePlaylist(userId: string, playlistId: string, updated
   }
 }
 
+export async function generateUploadUrl(userId: string, playlistId: string): Promise<string> {
+  const uploadUrl = await playlistAccess.getSignedUrl(playlistId)
+  await playlistAccess.updatePlaylistThumbnailUrl(userId, playlistId)
+
+  return uploadUrl
+}
+
 export async function deletePlaylistItem(userId: string, playlistId: string): Promise<void> {
   await playlistAccess.deletePlaylist(userId, playlistId)
 }

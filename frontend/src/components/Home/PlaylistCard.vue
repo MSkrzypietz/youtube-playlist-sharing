@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-sm rounded overflow-hidden shadow-lg">
-    <img class="w-full" :src="playlist.videos[0] && playlist.videos[0].thumbnailUrl" alt="Empty playlist">   
+    <img class="w-full" :src="thumbnailUrl" alt="Empty playlist">   
     <div class="flex px-4 py-4 items-center">
       <div class="flex-grow font-bold text-base">{{ playlist.name }}</div>      
     </div>
@@ -14,6 +14,15 @@
     name: "PlaylistCard",
     props: {
       playlist: PlaylistItem
+    },
+    computed: {
+      thumbnailUrl: function () {
+        if (this.playlist.thumbnailUrl) {
+          return this.playlist.thumbnailUrl
+        }
+
+        return this.playlist.videos[0] && this.playlist.videos[0].thumbnailUrl
+      }
     }
   }
 </script>
