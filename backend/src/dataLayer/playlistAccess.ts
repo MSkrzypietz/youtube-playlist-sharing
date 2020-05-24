@@ -56,7 +56,7 @@ export class PlaylistAccess {
       },
       UpdateExpression: "set videos=:newVideos",
       ExpressionAttributeValues:{
-          ":newVideos": { ...newVideos }
+          ":newVideos": newVideos
       }
     }).promise()
   }
