@@ -1,7 +1,7 @@
 import * as AWS  from 'aws-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
-import { PlaylistItem } from '../models/PlaylistItem'
+import { PlaylistItem, VideoItem } from '../models/PlaylistItem'
 
 export class PlaylistAccess {
 
@@ -46,6 +46,20 @@ export class PlaylistAccess {
 
     return newPlaylist
   }  
+
+  async updatePlaylistVideoUrls(userId: string, playlistId: string, newVideos: VideoItem[]) {
+    await this.docClient.update({
+      TableName: this.playlistsTable,
+      Key: {
+        "userId": userId,
+        "playlistId": playlistId
+      },
+      UpdateExpression: "set videos=:newVideos",
+      ExpressionAttributeValues:{
+          ":newVideos": { ...newVideos }
+      }
+    }).promise()
+  }
 
   async deletePlaylist(userId: string, playlistId: string) {
     await this.docClient.delete({

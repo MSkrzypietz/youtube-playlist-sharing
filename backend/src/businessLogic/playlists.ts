@@ -3,6 +3,7 @@ import * as uuid from 'uuid'
 import { PlaylistItem } from '../models/PlaylistItem'
 import { PlaylistAccess } from '../dataLayer/playlistAccess'
 import { CreatePlaylistRequest } from '../requests/CreatePlaylistRequest'
+import { UpdatePlaylistRequest } from '../requests/UpdatePlaylistRequest'
 
 const playlistAccess = new PlaylistAccess()
 
@@ -21,6 +22,12 @@ export async function createPlaylist(userId: string, newPlaylist: CreatePlaylist
     createdAt: new Date().toISOString(),
     ...newPlaylist
   })
+}
+
+export async function updatePlaylist(userId: string, playlistId: string, updatedPlaylist: UpdatePlaylistRequest): Promise<void> {
+  if (updatedPlaylist.videoUrls) {
+    await playlistAccess.updatePlaylistVideoUrls(userId, playlistId, updatedPlaylist.videoUrls)
+  }
 }
 
 export async function deletePlaylistItem(userId: string, playlistId: string): Promise<void> {

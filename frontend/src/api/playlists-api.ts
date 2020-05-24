@@ -2,6 +2,7 @@ import { apiEndpoint } from '../config'
 import { PlaylistItem } from '../../../backend/src/models/PlaylistItem'
 import { CreatePlaylistRequest } from '../../../backend/src/requests/CreatePlaylistRequest'
 import Axios from 'axios'
+import { UpdatePlaylistRequest } from '@/models/UpdatePlaylistRequest'
 
 export async function getUserPlaylists(idToken: string): Promise<PlaylistItem[]> {
   const response = await Axios.get(`${apiEndpoint}/playlists`, {
@@ -33,6 +34,15 @@ export async function getPlaylist(playlistId: string): Promise<PlaylistItem> {
   })
 
   return response.data.item
+}
+
+export async function updatePlaylist(idToken: string, playlistId: string, updatePlaylist: UpdatePlaylistRequest): Promise<void> {
+  await Axios.patch(`${apiEndpoint}/playlists/${playlistId}`, JSON.stringify(updatePlaylist), {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${idToken}`
+    }
+  })
 }
 
 export async function deletePlaylist(idToken: string, playlistId: string): Promise<void> {

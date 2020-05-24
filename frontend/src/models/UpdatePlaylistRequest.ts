@@ -1,4 +1,5 @@
-export interface UpdateTodoRequest {
-  name: string
-  videoUrls: string[]
+export interface UpdatePlaylistRequest {
+  name?: string;
+  videoUrls?: string[];
+  thumbnailUrl?: string;
 }

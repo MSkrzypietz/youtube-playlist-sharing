@@ -4,8 +4,8 @@
       <h1 class="text-left font-bold text-2xl">{{ playlist && playlist.name }}</h1>      
     </div>
     <div class="flex flex-wrap -mx-2 -mb-4">
-      <div v-for="(item) in playlist && playlist.videos" :key="item.url" class="w-full sm:w-1/2 md:w-1/3 px-2 mb-4">      
-        <video-card :video="item" />        
+      <div v-for="(item, index) in playlist && playlist.videos" :key="item.url" class="w-full sm:w-1/2 md:w-1/3 px-2 mb-4">      
+        <video-card @removeVideo="removeVideo(index)" :video="item" />        
       </div>      
     </div>
 
@@ -45,11 +45,13 @@
 </template>
 
 <script>
+  import Axios from 'axios'
+
   import { PlaylistItem } from '../../models/PlaylistItem'
   import VideoCard from './VideoCard'
   import LoadingBar from '../LoadingBar'
 
-  import { deletePlaylist } from '../../api/playlists-api'
+  import { deletePlaylist, updatePlaylist } from '../../api/playlists-api'
 
   export default {
     name: "VideoList",
@@ -81,6 +83,22 @@
       },
       toggleDeletionConfirmation() {
         this.showDeletionConfirmation = !this.showDeletionConfirmation
+      },
+      async removeVideo(index) {
+        const updateItem = {}
+        if (Array.isArray(this.playlist.videos)) {
+          this.playlist.videos.splice(index, 1)
+          updateItem.videoUrls = [...this.playlist.videos]
+        } else {
+          this.playlist.videos = null
+          updateItem.videoUrls = []
+        }
+
+        const claims = await this.$auth.getIdTokenClaims()
+        const idToken = claims.__raw
+        const playlistId = this.playlist.playlistId        
+
+        await updatePlaylist(idToken, playlistId, updateItem)
       }
     }
   }

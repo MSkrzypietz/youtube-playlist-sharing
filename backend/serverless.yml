@@ -75,6 +75,20 @@ functions:
           - dynamodb:PutItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PLAYLISTS_TABLE}
 
+  UpdatePlaylist:
+    handler: src/lambda/http/updatePlaylist.handler
+    events:
+      - http:
+          method: patch
+          path: playlists/{playlistId}
+          cors: true
+          authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PLAYLISTS_TABLE}
+
   DeletePlaylist:
     handler: src/lambda/http/deletePlaylist.handler
     events:
