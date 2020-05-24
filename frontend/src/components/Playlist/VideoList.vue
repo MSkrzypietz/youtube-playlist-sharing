@@ -20,8 +20,8 @@
 
       <h1 class="text-left font-bold text-2xl mt-10">Add a new video to your playlist</h1>
       <div class="flex w-3/5">
-        <input class="flex-grow bg-gray-200 appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-400" id="inline-playlist-youtube-url" type="text" placeholder="Enter a new Youtube URL">
-        <button class="ml-2 shadow bg-indigo-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">Add</button>
+        <input v-model="newVideoUrl" class="flex-grow bg-gray-200 appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-400" id="inline-playlist-youtube-url" type="text" placeholder="Enter a new Youtube URL">
+        <button @click="addVideo" class="ml-2 shadow bg-indigo-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">Add</button>
       </div>
 
       <h1 class="text-left font-bold text-2xl mt-10">Update the thumbnail of your playlist</h1>
@@ -66,7 +66,8 @@
       return {
         showDeletionConfirmation: false,
         isLoading: false,
-        newName: ''
+        newName: '',
+        newVideoUrl: ''
       }      
     },
     methods: {
@@ -86,13 +87,9 @@
         this.showDeletionConfirmation = !this.showDeletionConfirmation
       },
       async removeVideo(index) {
-        const updateItem = {}
-        if (Array.isArray(this.playlist.videos)) {
-          this.playlist.videos.splice(index, 1)
-          updateItem.videoUrls = [...this.playlist.videos]
-        } else {
-          this.playlist.videos = null
-          updateItem.videoUrls = []
+        this.playlist.videos.splice(index, 1)
+        const updateItem = {
+          videoUrls: [ ...this.playlist.videos]
         }
 
         const claims = await this.$auth.getIdTokenClaims()
@@ -112,6 +109,29 @@
         
         await updatePlaylist(idToken, playlistId, updateItem)
         this.playlist.name = this.newName
+      },
+      async addVideo() {
+        const url = this.newVideoUrl
+        const videoId = url.match("v=([a-zA-Z0-9_-]+)&?")[1]
+        const videoData = await Axios.get('https://noembed.com/embed', { params: { url } })
+        const newVideo = {
+          ownerId: this.$auth.user.sub,
+          caption: videoData.data.title,
+          url,
+          thumbnailUrl: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`
+        }
+               
+        this.playlist.videos.push(newVideo)      
+        this.newVideoUrl = ''
+
+        const claims = await this.$auth.getIdTokenClaims()
+        const idToken = claims.__raw
+        const playlistId = this.playlist.playlistId
+
+        const updateItem = {
+          videoUrls: this.playlist.videos
+        }
+        await updatePlaylist(idToken, playlistId, updateItem)
       }
     }
   }

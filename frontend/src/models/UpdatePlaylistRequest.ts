@@ -1,5 +1,7 @@
+import { VideoItem } from './PlaylistItem'
+
 export interface UpdatePlaylistRequest {
   name?: string;
-  videoUrls?: string[];
+  videoUrls?: VideoItem[];
   thumbnailUrl?: string;
 }

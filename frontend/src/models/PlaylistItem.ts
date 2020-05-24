@@ -1,4 +1,5 @@
-interface VideoItem {
+export interface VideoItem {
+  ownerId?: string;
   caption: string;
   url: string;
   thumbnailUrl?: string;
