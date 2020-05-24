@@ -61,6 +61,23 @@ export class PlaylistAccess {
     }).promise()
   }
 
+  async updatePlaylistName(userId: string, playlistId: string, newName: string) {
+    await this.docClient.update({
+      TableName: this.playlistsTable,
+      Key: {
+        "userId": userId,
+        "playlistId": playlistId
+      },
+      UpdateExpression: "set #name=:newName",
+      ExpressionAttributeValues:{
+          ":newName": newName
+      },
+      ExpressionAttributeNames: {
+        "#name": "name"
+      }
+    }).promise()
+  }
+
   async deletePlaylist(userId: string, playlistId: string) {
     await this.docClient.delete({
       TableName: this.playlistsTable,

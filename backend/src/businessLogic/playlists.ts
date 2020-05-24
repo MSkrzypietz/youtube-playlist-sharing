@@ -28,6 +28,10 @@ export async function updatePlaylist(userId: string, playlistId: string, updated
   if (updatedPlaylist.videoUrls) {
     await playlistAccess.updatePlaylistVideoUrls(userId, playlistId, updatedPlaylist.videoUrls)
   }
+
+  if (updatedPlaylist.name) {
+    await playlistAccess.updatePlaylistName(userId, playlistId, updatedPlaylist.name)
+  }
 }
 
 export async function deletePlaylistItem(userId: string, playlistId: string): Promise<void> {

@@ -14,8 +14,8 @@
     <div v-if="this.$auth.user && playlist && this.$auth.user.sub === playlist.userId">
       <h1 class="text-left font-bold text-2xl mt-10">Rename your playlist</h1>
       <div class="flex w-3/5">
-        <input class="flex-grow bg-gray-200 appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-400" id="inline-playlist-name" type="text" placeholder="Enter a new name">
-        <button class="ml-2 shadow bg-indigo-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">Rename</button>
+        <input v-model="newName" class="flex-grow bg-gray-200 appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-400" id="inline-playlist-name" type="text" placeholder="Enter a new name">
+        <button @click="renamePlaylist" class="ml-2 shadow bg-indigo-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">Rename</button>
       </div>
 
       <h1 class="text-left font-bold text-2xl mt-10">Add a new video to your playlist</h1>
@@ -65,7 +65,8 @@
     data() {
       return {
         showDeletionConfirmation: false,
-        isLoading: false
+        isLoading: false,
+        newName: ''
       }      
     },
     methods: {
@@ -96,9 +97,21 @@
 
         const claims = await this.$auth.getIdTokenClaims()
         const idToken = claims.__raw
-        const playlistId = this.playlist.playlistId        
+        const playlistId = this.playlist.playlistId
 
         await updatePlaylist(idToken, playlistId, updateItem)
+      },
+      async renamePlaylist() {
+        const claims = await this.$auth.getIdTokenClaims()
+        const idToken = claims.__raw
+        const playlistId = this.playlist.playlistId
+
+        const updateItem = {
+          name: this.newName
+        }
+        
+        await updatePlaylist(idToken, playlistId, updateItem)
+        this.playlist.name = this.newName
       }
     }
   }
