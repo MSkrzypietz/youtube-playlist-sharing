@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "CreatePlaylist",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "videos": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/video" }
+    }
+  },
+  "required": [
+    "name",
+    "videos"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "video": {
+      "type": "object",      
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "The userId of the videos owner."
+        },
+        "caption": {
+          "type": "string",
+          "description": "The caption of the video."
+        },
+        "url": {
+          "type": "string",
+          "description": "The youtube Url of the video."
+        },
+        "thumbnailUrl": {
+          "type": "string",
+          "description": "The thumbnail Url of the video."
+        }
+      },
+      "required": [ "ownerId", "caption", "url", "thumbnailUrl" ]
+    }
+  }
+}
