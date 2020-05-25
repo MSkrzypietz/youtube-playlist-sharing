@@ -3,10 +3,13 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
 import { PlaylistItem, VideoItem } from '../models/PlaylistItem'
 
+const AWSXRay = require('aws-xray-sdk')
+const XAWS = AWSXRay.captureAWS(AWS)
+
 export class PlaylistAccess {
 
   constructor(
-    private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
+    private readonly docClient: DocumentClient = new XAWS.DynamoDB.DocumentClient(),
     private readonly s3 = new AWS.S3({ signatureVersion: 'v4' }),
     private readonly playlistsTable = process.env.PLAYLISTS_TABLE,
     private readonly playlistIdIndex = process.env.PLAYLIST_ID_INDEX,
