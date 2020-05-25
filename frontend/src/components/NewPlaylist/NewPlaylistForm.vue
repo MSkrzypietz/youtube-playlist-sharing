@@ -75,10 +75,7 @@
         playlistId: '',
         playlistName: '',
         youtubeUrl: '',
-        playlistUrls: [
-          'https://www.youtube.com/watch?v=kic4EeXOfNw&t=1s',
-          'https://www.youtube.com/watch?v=r8EU32IN9ts'
-        ]
+        playlistUrls: []
       };
     },
     methods: {
