@@ -31,9 +31,9 @@ sls deploy -v
 To run a client application first edit the client/src/config.ts file to set correct parameters. And then run the following commands:
 
 ```
-cd client
+cd frontend
 npm install
-npm run start
+npm run serve
 ```
 
 This should start a development server with the React application that will interact with the serverless TODO application.
