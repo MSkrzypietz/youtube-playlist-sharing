@@ -11,6 +11,7 @@ Vue.config.productionTip = false
 Vue.use(Auth0Plugin, {
   domain: authConfig.domain,
   clientId: authConfig.clientId,
+  // eslint-disable-next-line
   onRedirectCallback: (appState: any) => {
     router.push(
       appState && appState.targetUrl
