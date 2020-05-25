@@ -15,6 +15,7 @@ This application lets you create and share your youtube playlists with your frie
 - DynamoDB
 - Node.js
 - Vue.js
+- Auth0
 
 # How to run the application
 ## Backend
