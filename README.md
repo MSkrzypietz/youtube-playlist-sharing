@@ -43,5 +43,8 @@ This should start a development server with the React application that will inte
 ## Playlist Management
 ![Playlist Management Example](https://github.com/MSkrzypietz/youtube-playlist-sharing/blob/master/images/PlaylistManagement.PNG)
 
+## Playlist Creation
+![User Playlists Example](https://github.com/MSkrzypietz/youtube-playlist-sharing/blob/master/images/NewPlaylist.PNG)
+
 ## All Playlists of a user with a custom thumbnail
 ![User Playlists Example](https://github.com/MSkrzypietz/youtube-playlist-sharing/blob/master/images/UserPlaylists.PNG)
