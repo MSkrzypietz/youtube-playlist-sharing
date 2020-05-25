@@ -75,7 +75,7 @@ export class PlaylistAccess {
     })
   }
 
-  async updatePlaylistThumbnailUrl(userId: string, playlistId: string) {
+  async updatePlaylistThumbnailUrl(userId: string, playlistId: string, thumbnailId: string) {
     await this.docClient.update({
       TableName: this.playlistsTable,
       Key: {
@@ -84,7 +84,7 @@ export class PlaylistAccess {
       },
       UpdateExpression: "set thumbnailUrl=:thumbnailUrl",
       ExpressionAttributeValues:{
-          ":thumbnailUrl": `https://${this.bucketName}.s3.amazonaws.com/${playlistId}`
+          ":thumbnailUrl": `https://${this.bucketName}.s3.amazonaws.com/${thumbnailId}`
       }
     }).promise()
   }

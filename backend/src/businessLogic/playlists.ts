@@ -35,8 +35,9 @@ export async function updatePlaylist(userId: string, playlistId: string, updated
 }
 
 export async function generateUploadUrl(userId: string, playlistId: string): Promise<string> {
-  const uploadUrl = await playlistAccess.getSignedUrl(playlistId)
-  await playlistAccess.updatePlaylistThumbnailUrl(userId, playlistId)
+  const thumbnailId = uuid.v4()
+  const uploadUrl = await playlistAccess.getSignedUrl(thumbnailId)
+  await playlistAccess.updatePlaylistThumbnailUrl(userId, playlistId, thumbnailId)
 
   return uploadUrl
 }
